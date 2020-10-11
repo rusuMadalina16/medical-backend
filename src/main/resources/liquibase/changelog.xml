@@ -8,5 +8,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <include file="liquibase/10112020_doctor.xml"/>
+    <include file="liquibase/10112020_patient.xml"/>
 
 </databaseChangeLog>

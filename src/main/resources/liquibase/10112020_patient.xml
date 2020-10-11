@@ -6,11 +6,16 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
    http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    
-    <changeSet id="10112020_22:22_create_doctor_table" author="rmada" >
-        <createTable tableName="doctor">
+
+    <changeSet id="10112020-22:22-create patient table" author="rmada">
+        <createTable tableName="patient">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
+            </column>
+
+            <column name="doctor_fk" type="bigint">
+                <constraints foreignKeyName="fk_patient_doctor" referencedTableName="doctor"
+                             referencedColumnNames="id" />
             </column>
 
             <column name="name" type="varchar(64)"/>
@@ -19,8 +24,11 @@
 
             <column name="gender" type="varchar(64)" />
 
-            <column name="address" type="varchar(164)" />
+            <column name="address" type="varchar(64)"/>
+
+            <column name="medical_record" type="varchar(300)"/>
         </createTable>
+
     </changeSet>
-    
+
 </databaseChangeLog>
