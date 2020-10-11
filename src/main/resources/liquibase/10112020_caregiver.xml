@@ -7,15 +7,10 @@
    http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="10112020-22:22-create patient table" author="rmada">
-        <createTable tableName="patient">
+    <changeSet id="10112020-22:55-create_caregiver_table" author="rmada">
+        <createTable tableName="caregiver">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true"/>
-            </column>
-
-            <column name="doctor_fk" type="bigint">
-                <constraints foreignKeyName="fk_patient_doctor" referencedTableName="doctor"
-                             referencedColumnNames="id" />
             </column>
 
             <column name="name" type="varchar(64)"/>
@@ -25,19 +20,8 @@
             <column name="gender" type="varchar(64)" />
 
             <column name="address" type="varchar(64)"/>
-
-            <column name="medical_record" type="varchar(300)"/>
         </createTable>
 
-    </changeSet>
-
-    <changeSet id="10112020-22:57-add_caregiver_fk" author="rmada">
-        <addColumn tableName="patient">
-            <column name="caregiver_fk" type="bigint">
-                <constraints foreignKeyName="fk_patient_caregiver" referencedTableName="caregiver"
-                             referencedColumnNames="id" />
-            </column>
-        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

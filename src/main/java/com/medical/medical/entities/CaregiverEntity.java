@@ -8,8 +8,8 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "doctor")
-public class DoctorEntity {
+@Table(name = "caregiver")
+public class CaregiverEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,6 +28,6 @@ public class DoctorEntity {
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "doctor_fk")
+    @JoinColumn(name = "caregiver_fk")
     private List<PatientEntity> patients = new ArrayList<>();
 }
