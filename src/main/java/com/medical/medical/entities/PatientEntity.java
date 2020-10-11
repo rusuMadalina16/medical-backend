@@ -32,4 +32,8 @@ public class PatientEntity {
     @ManyToOne
     @JoinColumn(name = "doctor_fk")
     private DoctorEntity doctorEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "caregiver_fk")
+    private CaregiverEntity caregiverEntity;
 }

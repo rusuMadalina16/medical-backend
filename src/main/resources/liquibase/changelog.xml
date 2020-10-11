@@ -9,5 +9,6 @@
 
     <include file="liquibase/10112020_doctor.xml"/>
     <include file="liquibase/10112020_patient.xml"/>
+    <include file="liquibase/10112020_caregiver.xml"/>
 
 </databaseChangeLog>
