@@ -1,17 +1,12 @@
 package com.medical.medical.service;
 
-import com.medical.medical.dtos.CaregiverDto;
-import com.medical.medical.dtos.DoctorDto;
-import com.medical.medical.dtos.PatientEntityDto;
-import com.medical.medical.entities.CaregiverEntity;
-import com.medical.medical.entities.DoctorEntity;
-import com.medical.medical.entities.PatientEntity;
+import com.medical.medical.dtos.*;
+import com.medical.medical.entities.*;
 import com.medical.medical.helper.CaregiverMapper;
 import com.medical.medical.helper.DoctorMapper;
+import com.medical.medical.helper.MedicationMapper;
 import com.medical.medical.helper.PatientMapper;
-import com.medical.medical.repository.CaregiverRepository;
-import com.medical.medical.repository.DoctorRepository;
-import com.medical.medical.repository.PatientRepository;
+import com.medical.medical.repository.*;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.stereotype.Service;
@@ -25,10 +20,13 @@ public class DoctorServiceImpl implements DoctorService{
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final CaregiverRepository caregiverRepository;
+    private final MedicationRepository medicationRepository;
+    private final PlanRepository planRepository;
 
     private final DoctorMapper doctorMapper;
     private final PatientMapper patientMapper;
     private final CaregiverMapper caregiverMapper;
+    private final MedicationMapper medicationMapper;
 
     @Override
     public void addPatient(PatientEntityDto patientEntityDto) {
@@ -102,8 +100,45 @@ public class DoctorServiceImpl implements DoctorService{
         Optional<CaregiverEntity> caregiverEntity = caregiverRepository.findById(id);
 
         if (caregiverEntity.isEmpty())
-            throw new ServiceException("No patient with that ID exists");
+            throw new ServiceException("No caregiver with that ID exists");
 
         caregiverRepository.deleteById(id);
+    }
+
+    @Override
+    public void addMedication(MedicationDto medicationDto) {
+        MedicationEntity entity = new MedicationEntity();
+        entity.setDosage(medicationDto.getDosage());
+        entity.setSideEffects(medicationDto.getSideEffects());
+        entity.setName(medicationDto.getName());
+
+        medicationRepository.save(entity);
+    }
+
+    @Override
+    public List<MedicationDto> getMedications() {
+        return medicationMapper.toDtos(medicationRepository.findAll());
+    }
+
+    @Override
+    public void deleteMedicationById(Long id) {
+        Optional<MedicationEntity> medicationEntity = medicationRepository.findById(id);
+
+        if (medicationEntity.isEmpty())
+            throw new ServiceException("No medication with that ID exists");
+
+        medicationRepository.deleteById(id);
+    }
+
+    @Override
+    public void addPlan(PlanDto planDto) {
+        PlanEntity planEntity = new PlanEntity();
+        planEntity.setDoctorDosage(planDto.getDoctorDosage());
+        planEntity.setMedicationId(planDto.getIdMedication());
+        planEntity.setPatientId(planDto.getIdPatient());
+        planEntity.setStartDate(planDto.getDataStart());
+        planEntity.setStopDate(planDto.getDataStop());
+
+        planRepository.save(planEntity);
     }
 }
