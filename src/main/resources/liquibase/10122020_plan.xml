@@ -1,0 +1,38 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="10122020-10:24-create_plan_table" author="rmada">
+        <createTable tableName="plan">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="patient_fk" type="bigint">
+                <constraints foreignKeyName="fk_plan_patient" referencedTableName="patient"
+                             referencedColumnNames="id" />
+            </column>
+
+            <column name="medication_fk" type="bigint">
+                <constraints foreignKeyName="fk_plan_medication" referencedTableName="medication"
+                             referencedColumnNames="id" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10122020-10:52-add_plan_dates" author="rmada">
+        <addColumn tableName="plan">
+            <column name="start_date" type="varchar(30)"/>
+
+            <column name="stop_date" type="varchar(30)"/>
+
+            <column name="doctor_dosage" type="varchar(200)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

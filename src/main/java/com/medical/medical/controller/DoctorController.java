@@ -1,7 +1,9 @@
 package com.medical.medical.controller;
 
 import com.medical.medical.dtos.CaregiverDto;
+import com.medical.medical.dtos.MedicationDto;
 import com.medical.medical.dtos.PatientEntityDto;
+import com.medical.medical.dtos.PlanDto;
 import com.medical.medical.service.DoctorService;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -83,6 +85,49 @@ public class DoctorController {
     public ResponseEntity<?> deleteCaregiverById(@PathVariable Long id) {
         try {
             doctorService.deleteCaregiverById(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/add-medication")
+    public ResponseEntity<String> addMedication(@RequestBody MedicationDto medicationDto) {
+        try {
+            doctorService.addMedication(medicationDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/get-medications")
+    public ResponseEntity<?> getMedications() {
+        try {
+            return ResponseEntity.ok().body(doctorService.getMedications());
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete-medication/{id}")
+    public ResponseEntity<?> deleteMedicationById(@PathVariable Long id) {
+        try {
+            doctorService.deleteMedicationById(id);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/add-plan")
+    public ResponseEntity<String> addPlan(@RequestBody PlanDto planDto) {
+        try {
+            doctorService.addPlan(planDto);
             return ResponseEntity.ok().build();
         }
         catch (ServiceException e) {

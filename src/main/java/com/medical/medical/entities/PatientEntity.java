@@ -3,7 +3,8 @@ package com.medical.medical.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.print.Doc;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -36,4 +37,12 @@ public class PatientEntity {
     @ManyToOne
     @JoinColumn(name = "caregiver_fk")
     private CaregiverEntity caregiverEntity;
+
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "plan",
+            joinColumns = { @JoinColumn(name = "patient_fk") },
+            inverseJoinColumns = { @JoinColumn(name = "medication_fk") }
+    )
+    List<MedicationEntity> medications = new ArrayList<>();
 }

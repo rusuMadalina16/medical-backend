@@ -6,12 +6,8 @@ import lombok.Data;
 public class DoctorDto {
 
     private Long id;
-
     private String name;
-
     private String birthDate;
-
     private String gender;
-
     private String address;
 }
