@@ -39,6 +39,26 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/get-med/{name}")
+    public ResponseEntity<?> getMedsByName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getMedsByName(name));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/ppatient/{name}")
+    public ResponseEntity<?> getPatientByName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientByName(name));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/get-patient/{id}")
     public ResponseEntity<?> getPatientById(@PathVariable Long id) {
         try {

@@ -36,4 +36,8 @@ public interface DoctorService {
     PatientEntityDto getPatientById(Long id);
 
     CaregiverDto getCaregiverById(Long id);
+
+    List<MedicationDto> getMedsByName(String name);
+
+    List<PatientEntityDto> getPatientByName(String name);
 }

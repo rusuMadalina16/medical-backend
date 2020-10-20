@@ -179,4 +179,16 @@ public class DoctorServiceImpl implements DoctorService{
 
         return caregiverMapper.toDto(doc.get());
     }
+
+    @Override
+    public List<MedicationDto> getMedsByName(String name) {
+        List<MedicationEntity> medicationEntities=medicationRepository.findByName(name);
+        return medicationMapper.toDtos(medicationEntities);
+    }
+
+    @Override
+    public List<PatientEntityDto> getPatientByName(String name) {
+        List<PatientEntity> patientEntities = patientRepository.findByName(name);
+        return patientMapper.toDtos(patientEntities);
+    }
 }
