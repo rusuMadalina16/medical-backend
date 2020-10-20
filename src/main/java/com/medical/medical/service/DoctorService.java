@@ -1,7 +1,6 @@
 package com.medical.medical.service;
 
 import com.medical.medical.dtos.*;
-import com.medical.medical.entities.MedicationEntity;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public interface DoctorService {
 
     void deletePatientById(Long id);
 
-    List<PatientEntityDto> getPatients(Long doctorId);
+    List<PatientEntityDto> getPatients();
 
     void addCaregiver(CaregiverDto caregiverDto);
 
@@ -27,4 +26,14 @@ public interface DoctorService {
     void deleteMedicationById(Long id);
 
     void addPlan(PlanDto planDto);
+
+    void updateMedication(MedicationDto medicationDto);
+
+    void updatePatient(PatientEntityDto patientEntityDto);
+
+    void updateCaregiver(CaregiverDto caregiverDto);
+
+    PatientEntityDto getPatientById(Long id);
+
+    CaregiverDto getCaregiverById(Long id);
 }

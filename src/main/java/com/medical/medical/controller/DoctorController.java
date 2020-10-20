@@ -39,6 +39,25 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/get-patient/{id}")
+    public ResponseEntity<?> getPatientById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientById(id));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/get-caregiver/{id}")
+    public ResponseEntity<?> getCaregiverById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getCaregiverById(id));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/delete-patient/{id}")
     public ResponseEntity<?> deleteReceiverById(@PathVariable Long id) {
         try {
@@ -50,10 +69,10 @@ public class DoctorController {
         }
     }
 
-    @GetMapping("/get-patients/{doctorId}")
-    public ResponseEntity<?> getPatients(@PathVariable Long doctorId) {
+    @GetMapping("/get-patients")
+    public ResponseEntity<?> getPatients() {
         try {
-            return ResponseEntity.ok().body(doctorService.getPatients(doctorId));
+            return ResponseEntity.ok().body(doctorService.getPatients());
         }
         catch(ServiceException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -132,6 +151,39 @@ public class DoctorController {
         }
         catch (ServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/update-medication")
+    public ResponseEntity<?> updateCategory(@RequestBody MedicationDto medicationDto){
+        try{
+            doctorService.updateMedication(medicationDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @PutMapping("/update-patient")
+    public ResponseEntity<?> updatePatient(@RequestBody PatientEntityDto patientEntityDto){
+        try{
+            doctorService.updatePatient(patientEntityDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @PutMapping("/update-caregiver")
+    public ResponseEntity<?> updateCaregiver(@RequestBody CaregiverDto caregiverDto){
+        try{
+            doctorService.updateCaregiver(caregiverDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
         }
     }
 }

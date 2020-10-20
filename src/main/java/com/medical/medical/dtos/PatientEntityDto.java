@@ -11,5 +11,4 @@ public class PatientEntityDto {
     private String gender;
     private String address;
     private String medicalRecord;
-    private Long doctorId;
 }

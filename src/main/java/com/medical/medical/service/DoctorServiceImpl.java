@@ -38,13 +38,6 @@ public class DoctorServiceImpl implements DoctorService{
         entity.setMedicalRecord(patientEntityDto.getMedicalRecord());
         entity.setName(patientEntityDto.getName());
 
-        Optional<DoctorEntity> doc = doctorRepository.findById(patientEntityDto.getDoctorId());
-
-        if (doc.isEmpty())
-            throw new ServiceException("Doctor does not exists!");
-
-        entity.setDoctorEntity(doc.get());
-
         patientRepository.save(entity);
     }
 
@@ -70,13 +63,8 @@ public class DoctorServiceImpl implements DoctorService{
     }
 
     @Override
-    public List<PatientEntityDto> getPatients(Long doctorId) {
-        Optional<DoctorEntity> doctorEntity = doctorRepository.findById(doctorId);
-
-        if (doctorEntity.isEmpty())
-            throw new ServiceException("No doctor with that ID exists");
-
-        return patientMapper.toDtos(doctorEntity.get().getPatients());
+    public List<PatientEntityDto> getPatients() {
+        return patientMapper.toDtos(patientRepository.findAll());
     }
 
     @Override
@@ -127,6 +115,10 @@ public class DoctorServiceImpl implements DoctorService{
         if (medicationEntity.isEmpty())
             throw new ServiceException("No medication with that ID exists");
 
+        List<PlanEntity> plans = planRepository.findAllByMedicationId(medicationEntity.get().getId());
+
+        plans.forEach(planEntity -> planRepository.deleteById(planEntity.getId()));
+
         medicationRepository.deleteById(id);
     }
 
@@ -140,5 +132,51 @@ public class DoctorServiceImpl implements DoctorService{
         planEntity.setStopDate(planDto.getDataStop());
 
         planRepository.save(planEntity);
+    }
+
+    @Override
+    public void updateMedication(MedicationDto medicationDto) {
+        Optional<MedicationEntity> cat = medicationRepository.findById(medicationDto.getId());
+        if (cat.isEmpty())
+            throw new ServiceException("No medication with that ID");
+        medicationRepository.save(medicationMapper.toEntity(medicationDto));
+    }
+
+    @Override
+    public void updatePatient(PatientEntityDto patientEntityDto) {
+        Optional<PatientEntity> cat = patientRepository.findById(patientEntityDto.getId());
+        if (cat.isEmpty())
+            throw new ServiceException("No medication with that ID");
+        patientRepository.save(patientMapper.toEntity(patientEntityDto));
+    }
+
+    @Override
+    public void updateCaregiver(CaregiverDto caregiverDto) {
+        Optional<CaregiverEntity> cat = caregiverRepository.findById(caregiverDto.getId());
+        if (cat.isEmpty())
+            throw new ServiceException("No medication with that ID");
+        caregiverRepository.save(caregiverMapper.toEntity(caregiverDto));
+    }
+
+    @Override
+    public PatientEntityDto getPatientById(Long id) {
+        Optional<PatientEntity> doc = patientRepository.findById(id);
+
+        if (doc.isEmpty()){
+            throw new ServiceException("Patient does not exists!");
+        }
+
+        return patientMapper.toDto(doc.get());
+    }
+
+    @Override
+    public CaregiverDto getCaregiverById(Long id) {
+        Optional<CaregiverEntity> doc = caregiverRepository.findById(id);
+
+        if (doc.isEmpty()){
+            throw new ServiceException("Caregiver does not exists!");
+        }
+
+        return caregiverMapper.toDto(doc.get());
     }
 }

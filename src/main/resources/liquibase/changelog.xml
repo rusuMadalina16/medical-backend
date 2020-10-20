@@ -12,5 +12,6 @@
     <include file="liquibase/10112020_caregiver.xml"/>
     <include file="liquibase/10122020_medication.xml"/>
     <include file="liquibase/10122020_plan.xml"/>
+    <include file="liquibase/10192020_user.xml"/>
 
 </databaseChangeLog>

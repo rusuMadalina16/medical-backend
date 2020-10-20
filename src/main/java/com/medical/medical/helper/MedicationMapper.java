@@ -1,9 +1,7 @@
 package com.medical.medical.helper;
 
 import com.medical.medical.dtos.MedicationDto;
-import com.medical.medical.dtos.PatientEntityDto;
 import com.medical.medical.entities.MedicationEntity;
-import com.medical.medical.entities.PatientEntity;
 import org.mapstruct.Mapper;
 
 import java.util.List;
