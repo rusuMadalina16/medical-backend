@@ -1,5 +1,6 @@
 package com.medical.medical.helper;
 
+import com.medical.medical.dtos.PatientDtoCare;
 import com.medical.medical.dtos.PatientEntityDto;
 import com.medical.medical.entities.PatientEntity;
 import org.mapstruct.Mapper;
@@ -12,4 +13,6 @@ public interface PatientMapper {
     PatientEntityDto toDto(PatientEntity patientEntity);
 
     List<PatientEntityDto> toDtos(List<PatientEntity> patientEntities);
+
+    PatientEntity toEntity3(PatientDtoCare patientDtoCare);
 }

@@ -38,6 +38,12 @@ public class DoctorServiceImpl implements DoctorService{
         entity.setMedicalRecord(patientEntityDto.getMedicalRecord());
         entity.setName(patientEntityDto.getName());
 
+        System.out.println(entity.toString());
+        Optional<DoctorEntity> doc = doctorRepository.findById(patientEntityDto.getDoctorId());
+        if(doc.isEmpty()){
+            throw new ServiceException("Doctor does not exists!");
+        }
+        entity.setDoctorEntity(doc.get());
         patientRepository.save(entity);
     }
 
@@ -55,6 +61,10 @@ public class DoctorServiceImpl implements DoctorService{
     @Override
     public void deletePatientById(Long id) {
         Optional<PatientEntity> receiverEntity = patientRepository.findById(id);
+
+        List<PlanEntity> plans = planRepository.findAllByPatientId(id);
+
+        plans.forEach(plan -> planRepository.deleteById(plan.getId()));
 
         if (receiverEntity.isEmpty())
             throw new ServiceException("No patient with that ID exists");
@@ -190,5 +200,40 @@ public class DoctorServiceImpl implements DoctorService{
     public List<PatientEntityDto> getPatientByName(String name) {
         List<PatientEntity> patientEntities = patientRepository.findByName(name);
         return patientMapper.toDtos(patientEntities);
+    }
+
+    @Override
+    public List<CaregiverDto> getCaregiverByName(String name) {
+        List<CaregiverEntity> caregiverEntities = caregiverRepository.findByName(name);
+        return caregiverMapper.toDtos(caregiverEntities);
+    }
+
+    @Override
+    public void updatePatientCare(PatientDtoCare patientDtoCare) {
+        Optional<PatientEntity> cat = patientRepository.findById(patientDtoCare.getId());
+        if (cat.isEmpty())
+            throw new ServiceException("No patient with that ID");
+
+        Optional<CaregiverEntity> care = caregiverRepository.findById(patientDtoCare.getCaregiverId());
+        if (care.isEmpty())
+            throw new ServiceException("No caregiver with that ID");
+
+        Optional<DoctorEntity> doc = doctorRepository.findById(patientDtoCare.getDoctorId());
+        if (doc.isEmpty())
+            throw new ServiceException("No doctor with that ID");
+
+        PatientEntity patientEntity = new PatientEntity();
+
+        patientEntity.setDoctorEntity(doc.get());
+        patientEntity.setCaregiverEntity(care.get());
+        patientEntity.setName(patientDtoCare.getName());
+        patientEntity.setMedicalRecord(patientDtoCare.getMedicalRecord());
+        patientEntity.setGender(patientDtoCare.getGender());
+        patientEntity.setBirthDate(patientDtoCare.getBirthDate());
+        patientEntity.setAddress(patientDtoCare.getAddress());
+
+        patientRepository.deleteById(patientDtoCare.getId());
+
+        patientRepository.save(patientEntity);
     }
 }

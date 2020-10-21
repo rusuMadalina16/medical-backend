@@ -1,9 +1,6 @@
 package com.medical.medical.controller;
 
-import com.medical.medical.dtos.CaregiverDto;
-import com.medical.medical.dtos.MedicationDto;
-import com.medical.medical.dtos.PatientEntityDto;
-import com.medical.medical.dtos.PlanDto;
+import com.medical.medical.dtos.*;
 import com.medical.medical.service.DoctorService;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -53,6 +50,16 @@ public class DoctorController {
     public ResponseEntity<?> getPatientByName(@PathVariable String name) {
         try {
             return ResponseEntity.ok().body(doctorService.getPatientByName(name));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/ccare/{name}")
+    public ResponseEntity<?> getCaregiverByName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getCaregiverByName(name));
         }
         catch(ServiceException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -200,6 +207,17 @@ public class DoctorController {
     public ResponseEntity<?> updateCaregiver(@RequestBody CaregiverDto caregiverDto){
         try{
             doctorService.updateCaregiver(caregiverDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @PutMapping("/update-patient-caregiver")
+    public ResponseEntity<?> updatePatientCaregiver(@RequestBody PatientDtoCare patientDtoCare){
+        try{
+            doctorService.updatePatientCare(patientDtoCare);
             return ResponseEntity.ok().build();
         }
         catch (ServiceException e) {

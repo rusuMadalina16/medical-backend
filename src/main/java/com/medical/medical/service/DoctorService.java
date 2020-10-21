@@ -40,4 +40,8 @@ public interface DoctorService {
     List<MedicationDto> getMedsByName(String name);
 
     List<PatientEntityDto> getPatientByName(String name);
+
+    List<CaregiverDto> getCaregiverByName(String name);
+
+    void updatePatientCare(PatientDtoCare patientDtoCare);
 }
