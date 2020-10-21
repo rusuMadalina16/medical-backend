@@ -1,6 +1,8 @@
 package com.medical.medical.controller;
 
 import com.medical.medical.dtos.*;
+import com.medical.medical.entities.PlanEntity;
+import com.medical.medical.repository.PlanRepository;
 import com.medical.medical.service.DoctorService;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -8,12 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/doctor")
 @CrossOrigin
 @AllArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
+    private final PlanRepository planRepository;
 
     @PostMapping("/add-patient")
     public ResponseEntity<String> addReceiver(@RequestBody PatientEntityDto patientEntityDto) {
@@ -217,7 +222,9 @@ public class DoctorController {
     @PutMapping("/update-patient-caregiver")
     public ResponseEntity<?> updatePatientCaregiver(@RequestBody PatientDtoCare patientDtoCare){
         try{
+            List<PlanEntity> meds = planRepository.findAllByPatientId(patientDtoCare.getId());
             doctorService.updatePatientCare(patientDtoCare);
+            doctorService.updatePlanAgain(meds);
             return ResponseEntity.ok().build();
         }
         catch (ServiceException e) {

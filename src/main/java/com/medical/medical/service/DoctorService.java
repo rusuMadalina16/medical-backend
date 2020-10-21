@@ -1,6 +1,7 @@
 package com.medical.medical.service;
 
 import com.medical.medical.dtos.*;
+import com.medical.medical.entities.PlanEntity;
 
 import java.util.List;
 
@@ -44,4 +45,6 @@ public interface DoctorService {
     List<CaregiverDto> getCaregiverByName(String name);
 
     void updatePatientCare(PatientDtoCare patientDtoCare);
+
+    void updatePlanAgain(List<PlanEntity> meds);
 }

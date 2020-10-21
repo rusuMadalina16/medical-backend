@@ -8,11 +8,15 @@ import com.medical.medical.helper.MedicationMapper;
 import com.medical.medical.helper.PatientMapper;
 import com.medical.medical.repository.*;
 import lombok.AllArgsConstructor;
+import org.hibernate.Session;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -222,18 +226,28 @@ public class DoctorServiceImpl implements DoctorService{
         if (doc.isEmpty())
             throw new ServiceException("No doctor with that ID");
 
-        PatientEntity patientEntity = new PatientEntity();
+        PatientEntity patientEntity = patientMapper.toEntity3(patientDtoCare);
 
-        patientEntity.setDoctorEntity(doc.get());
         patientEntity.setCaregiverEntity(care.get());
-        patientEntity.setName(patientDtoCare.getName());
-        patientEntity.setMedicalRecord(patientDtoCare.getMedicalRecord());
-        patientEntity.setGender(patientDtoCare.getGender());
-        patientEntity.setBirthDate(patientDtoCare.getBirthDate());
-        patientEntity.setAddress(patientDtoCare.getAddress());
-
-        patientRepository.deleteById(patientDtoCare.getId());
+        patientEntity.setDoctorEntity(doc.get());
 
         patientRepository.save(patientEntity);
+
     }
+
+    @Override
+    public void updatePlanAgain(List<PlanEntity> meds) {
+
+        for(PlanEntity planEntity:meds){
+            PlanEntity planEntity1 = new PlanEntity();
+            planEntity1.setPatientId(planEntity.getPatientId());
+            planEntity1.setStopDate(planEntity.getStopDate());
+            planEntity1.setStartDate(planEntity.getStartDate());
+            planEntity1.setMedicationId(planEntity.getMedicationId());
+            planEntity1.setDoctorDosage(planEntity.getDoctorDosage());
+            planRepository.save(planEntity1);
+        }
+    }
+
+
 }
