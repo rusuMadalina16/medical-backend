@@ -8,12 +8,9 @@ import com.medical.medical.helper.MedicationMapper;
 import com.medical.medical.helper.PatientMapper;
 import com.medical.medical.repository.*;
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
 import org.hibernate.service.spi.ServiceException;
-import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -77,8 +74,22 @@ public class DoctorServiceImpl implements DoctorService{
     }
 
     @Override
-    public List<PatientEntityDto> getPatients() {
-        return patientMapper.toDtos(patientRepository.findAll());
+    public List<PatientDtoCare> getPatients() {
+//        return patientRepository.findAll().stream()
+//                .map( r->{
+//                    PatientDtoCare patientDtoCare = new PatientDtoCare();
+//                    patientDtoCare.setAddress(r.getAddress());
+//                    patientDtoCare.setBirthDate(r.getBirthDate());
+//                    patientDtoCare.setCaregiverId(r.getCaregiverEntity().getId());
+//                    patientDtoCare.setDoctorId(r.getDoctorEntity().getId());
+//                    patientDtoCare.setMedicalRecord(r.getMedicalRecord());
+//                    patientDtoCare.setName(r.getName());
+//                    patientDtoCare.setGender(r.getGender());
+//                    patientDtoCare.setId(r.getId());
+//                    return patientDtoCare;
+//                })
+//                .collect(Collectors.toList());
+        return patientMapper.toDtos2(patientRepository.findAll());
     }
 
     @Override
@@ -157,11 +168,26 @@ public class DoctorServiceImpl implements DoctorService{
     }
 
     @Override
-    public void updatePatient(PatientEntityDto patientEntityDto) {
-        Optional<PatientEntity> cat = patientRepository.findById(patientEntityDto.getId());
+    public void updatePatient(PatientDtoCare patientDtoCare) {
+        Optional<PatientEntity> cat = patientRepository.findById(patientDtoCare.getId());
         if (cat.isEmpty())
             throw new ServiceException("No medication with that ID");
-        patientRepository.save(patientMapper.toEntity(patientEntityDto));
+
+        List<PlanEntity> meds = planRepository.findAllByPatientId(patientDtoCare.getId());
+
+        PatientEntity pat = patientMapper.toEntity3(patientDtoCare);
+
+       // if (patientDtoCare.getCaregiverId()!=null){
+            pat.setCaregiverEntity(cat.get().getCaregiverEntity());
+        //}
+
+        //if (patientDtoCare.getDoctorId()!=null){
+            pat.setDoctorEntity(cat.get().getDoctorEntity());
+        //}
+
+        patientRepository.save(pat);
+
+        updatePlanAgain(meds);
     }
 
     @Override
@@ -169,7 +195,10 @@ public class DoctorServiceImpl implements DoctorService{
         Optional<CaregiverEntity> cat = caregiverRepository.findById(caregiverDto.getId());
         if (cat.isEmpty())
             throw new ServiceException("No medication with that ID");
-        caregiverRepository.save(caregiverMapper.toEntity(caregiverDto));
+        List<PatientEntity> pats = cat.get().getPatients();
+        CaregiverEntity care = caregiverMapper.toEntity(caregiverDto);
+        care.setPatients(pats);
+        caregiverRepository.save(care);
     }
 
     @Override

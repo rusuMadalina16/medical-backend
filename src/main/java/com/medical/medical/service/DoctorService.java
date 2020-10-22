@@ -12,7 +12,7 @@ public interface DoctorService {
 
     void deletePatientById(Long id);
 
-    List<PatientEntityDto> getPatients();
+    List<PatientDtoCare> getPatients();
 
     void addCaregiver(CaregiverDto caregiverDto);
 
@@ -30,7 +30,7 @@ public interface DoctorService {
 
     void updateMedication(MedicationDto medicationDto);
 
-    void updatePatient(PatientEntityDto patientEntityDto);
+    void updatePatient(PatientDtoCare patientDtoCare);
 
     void updateCaregiver(CaregiverDto caregiverDto);
 

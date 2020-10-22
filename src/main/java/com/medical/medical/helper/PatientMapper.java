@@ -15,4 +15,6 @@ public interface PatientMapper {
     List<PatientEntityDto> toDtos(List<PatientEntity> patientEntities);
 
     PatientEntity toEntity3(PatientDtoCare patientDtoCare);
+
+    List<PatientDtoCare> toDtos2(List<PatientEntity> all);
 }

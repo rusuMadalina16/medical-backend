@@ -198,9 +198,10 @@ public class DoctorController {
     }
 
     @PutMapping("/update-patient")
-    public ResponseEntity<?> updatePatient(@RequestBody PatientEntityDto patientEntityDto){
+    public ResponseEntity<?> updatePatient(@RequestBody PatientDtoCare patientDtoCare){
         try{
-            doctorService.updatePatient(patientEntityDto);
+            System.out.println(patientDtoCare.toString());
+            doctorService.updatePatient(patientDtoCare);
             return ResponseEntity.ok().build();
         }
         catch (ServiceException e) {
