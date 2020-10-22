@@ -232,4 +232,14 @@ public class DoctorController {
             return ResponseEntity.badRequest().body("No such category");
         }
     }
+
+    @GetMapping("/get-patients/{doctorId}")
+    public ResponseEntity<?> getPatientsByDoctorId(@PathVariable Long doctorId) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientsByDoctorId(doctorId));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

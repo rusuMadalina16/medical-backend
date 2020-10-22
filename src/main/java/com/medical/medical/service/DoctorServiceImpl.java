@@ -75,20 +75,6 @@ public class DoctorServiceImpl implements DoctorService{
 
     @Override
     public List<PatientDtoCare> getPatients() {
-//        return patientRepository.findAll().stream()
-//                .map( r->{
-//                    PatientDtoCare patientDtoCare = new PatientDtoCare();
-//                    patientDtoCare.setAddress(r.getAddress());
-//                    patientDtoCare.setBirthDate(r.getBirthDate());
-//                    patientDtoCare.setCaregiverId(r.getCaregiverEntity().getId());
-//                    patientDtoCare.setDoctorId(r.getDoctorEntity().getId());
-//                    patientDtoCare.setMedicalRecord(r.getMedicalRecord());
-//                    patientDtoCare.setName(r.getName());
-//                    patientDtoCare.setGender(r.getGender());
-//                    patientDtoCare.setId(r.getId());
-//                    return patientDtoCare;
-//                })
-//                .collect(Collectors.toList());
         return patientMapper.toDtos2(patientRepository.findAll());
     }
 
@@ -276,6 +262,27 @@ public class DoctorServiceImpl implements DoctorService{
             planEntity1.setDoctorDosage(planEntity.getDoctorDosage());
             planRepository.save(planEntity1);
         }
+    }
+
+    @Override
+    public List<PatientDtoCare> getPatientsByDoctorId(Long doctorId) {
+        Optional<DoctorEntity> doc = doctorRepository.findById(doctorId);
+
+        if (doc.isEmpty()){
+            throw new ServiceException("Doctor does not exists!");
+        }
+
+        List<PatientEntity> patientEntities = doc.get().getPatients();
+
+        return patientEntities.stream().map(r -> {
+            PatientDtoCare patientDtoCare = patientMapper.toDto2(r);
+            patientDtoCare.setDoctorId(doctorId);
+            if (r.getCaregiverEntity()!=null) {
+                patientDtoCare.setCaregiverId(r.getCaregiverEntity().getId());
+            }
+            return patientDtoCare;
+        })
+        .collect(Collectors.toList());
     }
 
 
