@@ -38,7 +38,7 @@ public class PatientEntity {
     @JoinColumn(name = "caregiver_fk")
     private CaregiverEntity caregiverEntity;
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany
     @JoinTable(
             name = "plan",
             joinColumns = { @JoinColumn(name = "patient_fk") },

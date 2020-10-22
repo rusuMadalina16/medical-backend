@@ -1,9 +1,8 @@
 package com.medical.medical.controller;
 
-import com.medical.medical.dtos.CaregiverDto;
-import com.medical.medical.dtos.MedicationDto;
-import com.medical.medical.dtos.PatientEntityDto;
-import com.medical.medical.dtos.PlanDto;
+import com.medical.medical.dtos.*;
+import com.medical.medical.entities.PlanEntity;
+import com.medical.medical.repository.PlanRepository;
 import com.medical.medical.service.DoctorService;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -11,12 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/doctor")
 @CrossOrigin
 @AllArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
+    private final PlanRepository planRepository;
 
     @PostMapping("/add-patient")
     public ResponseEntity<String> addReceiver(@RequestBody PatientEntityDto patientEntityDto) {
@@ -39,6 +41,55 @@ public class DoctorController {
         }
     }
 
+    @GetMapping("/get-med/{name}")
+    public ResponseEntity<?> getMedsByName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getMedsByName(name));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/ppatient/{name}")
+    public ResponseEntity<?> getPatientByName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientByName(name));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/ccare/{name}")
+    public ResponseEntity<?> getCaregiverByName(@PathVariable String name) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getCaregiverByName(name));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-patient/{id}")
+    public ResponseEntity<?> getPatientById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientById(id));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/get-caregiver/{id}")
+    public ResponseEntity<?> getCaregiverById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getCaregiverById(id));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/delete-patient/{id}")
     public ResponseEntity<?> deleteReceiverById(@PathVariable Long id) {
         try {
@@ -50,10 +101,10 @@ public class DoctorController {
         }
     }
 
-    @GetMapping("/get-patients/{doctorId}")
-    public ResponseEntity<?> getPatients(@PathVariable Long doctorId) {
+    @GetMapping("/get-patients")
+    public ResponseEntity<?> getPatients() {
         try {
-            return ResponseEntity.ok().body(doctorService.getPatients(doctorId));
+            return ResponseEntity.ok().body(doctorService.getPatients());
         }
         catch(ServiceException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -132,6 +183,63 @@ public class DoctorController {
         }
         catch (ServiceException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/update-medication")
+    public ResponseEntity<?> updateCategory(@RequestBody MedicationDto medicationDto){
+        try{
+            doctorService.updateMedication(medicationDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @PutMapping("/update-patient")
+    public ResponseEntity<?> updatePatient(@RequestBody PatientDtoCare patientDtoCare){
+        try{
+            System.out.println(patientDtoCare.toString());
+            doctorService.updatePatient(patientDtoCare);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @PutMapping("/update-caregiver")
+    public ResponseEntity<?> updateCaregiver(@RequestBody CaregiverDto caregiverDto){
+        try{
+            doctorService.updateCaregiver(caregiverDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @PutMapping("/update-patient-caregiver")
+    public ResponseEntity<?> updatePatientCaregiver(@RequestBody PatientDtoCare patientDtoCare){
+        try{
+            List<PlanEntity> meds = planRepository.findAllByPatientId(patientDtoCare.getId());
+            doctorService.updatePatientCare(patientDtoCare);
+            doctorService.updatePlanAgain(meds);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return ResponseEntity.badRequest().body("No such category");
+        }
+    }
+
+    @GetMapping("/get-patients/{doctorId}")
+    public ResponseEntity<?> getPatientsByDoctorId(@PathVariable Long doctorId) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientsByDoctorId(doctorId));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

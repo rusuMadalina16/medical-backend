@@ -27,7 +27,7 @@ public class CaregiverEntity {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @JoinColumn(name = "caregiver_fk")
     private List<PatientEntity> patients = new ArrayList<>();
 }

@@ -1,0 +1,30 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="10192020-10:45-create_user_table" author="rmada">
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="username" type="varchar(200)"/>
+
+            <column name="password" type="varchar(200)"/>
+
+            <column name="role" type="varchar(200)"/>
+
+            <column name="clientId" type="bigint"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="10192020-11:31-rename_table_user" author="rmada">
+        <renameTable oldTableName="user" newTableName="usermed"/>
+    </changeSet>
+
+</databaseChangeLog>

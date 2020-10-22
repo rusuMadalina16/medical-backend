@@ -27,7 +27,7 @@ public class DoctorEntity {
     @Column(name = "address")
     private String address;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany
     @JoinColumn(name = "doctor_fk")
     private List<PatientEntity> patients = new ArrayList<>();
 }

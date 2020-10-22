@@ -2,9 +2,8 @@ package com.medical.medical.dtos;
 
 import lombok.Data;
 
-
 @Data
-public class PatientEntityDto {
+public class PatientDtoCare {
     private Long id;
     private String name;
     private String birthDate;
@@ -12,4 +11,5 @@ public class PatientEntityDto {
     private String address;
     private String medicalRecord;
     private Long doctorId;
+    private Long caregiverId;
 }
