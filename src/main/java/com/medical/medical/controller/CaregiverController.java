@@ -22,4 +22,14 @@ public class CaregiverController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/get-caregiver/{caregiverId}")
+    public ResponseEntity<?> getCaregiverById(@PathVariable Long caregiverId) {
+        try {
+            return ResponseEntity.ok().body(caregiverService.getCaregiverById(caregiverId));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.medical.medical.service;
 
+import com.medical.medical.dtos.CaregiverDto;
 import com.medical.medical.dtos.PatientEntityDto;
 import com.medical.medical.entities.CaregiverEntity;
 import com.medical.medical.entities.PatientEntity;
@@ -21,6 +22,7 @@ public class CaregiverServiceImpl implements CaregiverService{
     private final PatientMapper patientMapper;
 
     private final PatientRepository patientRepository;
+    private final CaregiverMapper caregiverMapper;
 
     @Override
     public List<PatientEntityDto> getPatients(Long caregiverId) {
@@ -36,5 +38,14 @@ public class CaregiverServiceImpl implements CaregiverService{
         });
 
         return patients;
+    }
+
+    @Override
+    public CaregiverDto getCaregiverById(Long caregiverId) {
+        Optional<CaregiverEntity> care = caregiverRepository.findById(caregiverId);
+        if (care.isEmpty()){
+            throw new ServiceException("Caregiver does not exist");
+        }
+        return caregiverMapper.toDto(care.get());
     }
 }
