@@ -8,6 +8,7 @@ public class PlanDto {
     private String dataStart;
     private String dataStop;
     private String doctorDosage;
+    private String interval;
     private Long idMedication;
     private Long idPatient;
 }

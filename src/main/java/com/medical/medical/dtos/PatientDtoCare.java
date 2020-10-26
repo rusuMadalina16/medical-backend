@@ -10,6 +10,7 @@ public class PatientDtoCare {
     private String gender;
     private String address;
     private String medicalRecord;
+    private String interval;
     private Long doctorId;
     private Long caregiverId;
 }
