@@ -141,6 +141,7 @@ public class DoctorServiceImpl implements DoctorService{
         planEntity.setPatientId(planDto.getIdPatient());
         planEntity.setStartDate(planDto.getDataStart());
         planEntity.setStopDate(planDto.getDataStop());
+        planEntity.setInterval(planDto.getInterval());
 
         planRepository.save(planEntity);
     }
@@ -260,6 +261,7 @@ public class DoctorServiceImpl implements DoctorService{
             planEntity1.setStartDate(planEntity.getStartDate());
             planEntity1.setMedicationId(planEntity.getMedicationId());
             planEntity1.setDoctorDosage(planEntity.getDoctorDosage());
+            planEntity1.setInterval(planEntity.getInterval());
             planRepository.save(planEntity1);
         }
     }

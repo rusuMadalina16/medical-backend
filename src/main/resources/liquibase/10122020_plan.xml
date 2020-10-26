@@ -35,4 +35,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="10262020-11:02-add_plan_intervals" author="rmada">
+        <addColumn tableName="plan">
+            <column name="interval" type="varchar(400)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

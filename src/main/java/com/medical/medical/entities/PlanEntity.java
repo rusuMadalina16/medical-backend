@@ -27,4 +27,7 @@ public class PlanEntity {
 
     @Column(name = "doctor_dosage")
     private String doctorDosage;
+
+    @Column(name = "interval")
+    private String interval;
 }
