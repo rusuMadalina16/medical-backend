@@ -57,4 +57,8 @@ public interface DoctorService {
     void addDoctor(SignUpDto signUpDto);
 
     void addUser3(SignUpDto signUpDto);
+
+    LogInDto getPatientAccount(Long patientId);
+
+    LogInDto getCaregiverAccount(Long caregiverId);
 }

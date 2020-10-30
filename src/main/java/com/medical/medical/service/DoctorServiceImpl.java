@@ -9,6 +9,7 @@ import com.medical.medical.helper.MedicationMapper;
 import com.medical.medical.helper.PatientMapper;
 import com.medical.medical.repository.*;
 import liquibase.pro.packaged.D;
+import liquibase.pro.packaged.L;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.passay.CharacterRule;
@@ -369,4 +370,26 @@ public class DoctorServiceImpl implements DoctorService{
 
         userRepository.save(userEntity);
     }
+
+    @Override
+    public LogInDto getPatientAccount(Long patientId) {
+        UserEntity userEntity= userRepository.findByClientIdAndRole(patientId,"PATIENT");
+
+        LogInDto logInDto = new LogInDto();
+        logInDto.setPassword(userEntity.getPassword());
+        logInDto.setUsername(userEntity.getUsername());
+        return logInDto;
+    }
+
+    @Override
+    public LogInDto getCaregiverAccount(Long caregiverId) {
+        UserEntity userEntity= userRepository.findByClientIdAndRole(caregiverId,"CAREGIVER");
+
+        LogInDto logInDto = new LogInDto();
+        logInDto.setPassword(userEntity.getPassword());
+        logInDto.setUsername(userEntity.getUsername());
+        return logInDto;
+    }
+
+
 }

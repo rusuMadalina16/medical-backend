@@ -256,4 +256,24 @@ public class DoctorController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/get-patient-details/{patientId}")
+    public ResponseEntity<?> getAccountDetailsPatient(@PathVariable Long patientId) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getPatientAccount(patientId));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-caregiver-details/{caregiverId}")
+    public ResponseEntity<?> getAccountDetailsCaregiver(@PathVariable Long caregiverId) {
+        try {
+            return ResponseEntity.ok().body(doctorService.getCaregiverAccount(caregiverId));
+        }
+        catch(ServiceException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
