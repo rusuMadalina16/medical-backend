@@ -244,4 +244,16 @@ public class DoctorController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/add-doctor")
+    public ResponseEntity<String> addDoctor(@RequestBody SignUpDto signUpDto) {
+        try {
+            doctorService.addDoctor(signUpDto);
+            doctorService.addUser3(signUpDto);
+            return ResponseEntity.ok().build();
+        }
+        catch (ServiceException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

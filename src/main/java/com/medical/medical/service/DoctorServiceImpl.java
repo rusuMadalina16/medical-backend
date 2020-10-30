@@ -8,6 +8,7 @@ import com.medical.medical.helper.DoctorMapper;
 import com.medical.medical.helper.MedicationMapper;
 import com.medical.medical.helper.PatientMapper;
 import com.medical.medical.repository.*;
+import liquibase.pro.packaged.D;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.passay.CharacterRule;
@@ -336,5 +337,30 @@ public class DoctorServiceImpl implements DoctorService{
         return generator.generatePassword(12, rules);
     }
 
+    @Override
+    public void addDoctor(SignUpDto signUpDto){
+        DoctorEntity doctorEntity= new DoctorEntity();
+        doctorEntity.setAddress(signUpDto.getAddress());
+        doctorEntity.setBirthDate(signUpDto.getBirthDate());
+        doctorEntity.setGender(signUpDto.getGender());
+        doctorEntity.setName(signUpDto.getName());
 
+        doctorRepository.save(doctorEntity);
+    }
+
+    @Override
+    public void addUser3(SignUpDto signUpDto){
+        DoctorEntity doctorEntity = doctorRepository.findByNameAndBirthDateAndGenderAndAddress(
+                signUpDto.getName(), signUpDto.getBirthDate(), signUpDto.getGender(),
+                signUpDto.getAddress()
+        );
+
+        UserEntity userEntity=new UserEntity();
+        userEntity.setRole("DOCTOR");
+        userEntity.setUsername(signUpDto.getUsername());
+        userEntity.setPassword(signUpDto.getPassword());
+        userEntity.setClientId(doctorEntity.getId());
+
+        userRepository.save(userEntity);
+    }
 }
