@@ -49,4 +49,8 @@ public interface DoctorService {
     void updatePlanAgain(List<PlanEntity> meds);
 
     List<PatientDtoCare> getPatientsByDoctorId(Long doctorId);
+
+    void addUser(PatientEntityDto patientEntityDto);
+
+    void addUser2(CaregiverDto caregiverDto);
 }

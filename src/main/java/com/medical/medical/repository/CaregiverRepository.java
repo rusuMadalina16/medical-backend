@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CaregiverRepository extends JpaRepository<CaregiverEntity, Long> {
     List<CaregiverEntity> findByName(String name);
+
+    CaregiverEntity findByNameAndBirthDateAndGenderAndAddress(String name, String birthDate, String gender, String address);
 }

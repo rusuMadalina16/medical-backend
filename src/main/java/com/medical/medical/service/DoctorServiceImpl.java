@@ -1,5 +1,6 @@
 package com.medical.medical.service;
 
+import com.github.javafaker.Faker;
 import com.medical.medical.dtos.*;
 import com.medical.medical.entities.*;
 import com.medical.medical.helper.CaregiverMapper;
@@ -9,8 +10,12 @@ import com.medical.medical.helper.PatientMapper;
 import com.medical.medical.repository.*;
 import lombok.AllArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +28,7 @@ public class DoctorServiceImpl implements DoctorService{
     private final CaregiverRepository caregiverRepository;
     private final MedicationRepository medicationRepository;
     private final PlanRepository planRepository;
+    private final UserRepository userRepository;
 
     private final DoctorMapper doctorMapper;
     private final PatientMapper patientMapper;
@@ -45,6 +51,7 @@ public class DoctorServiceImpl implements DoctorService{
             throw new ServiceException("Doctor does not exists!");
         }
         entity.setDoctorEntity(doc.get());
+
         patientRepository.save(entity);
     }
 
@@ -285,6 +292,48 @@ public class DoctorServiceImpl implements DoctorService{
             return patientDtoCare;
         })
         .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addUser(PatientEntityDto patientEntityDto) {
+        PatientEntity patientEntity = patientRepository.findByNameAndBirthDateAndGenderAndAddressAndMedicalRecord(
+                patientEntityDto.getName(),patientEntityDto.getBirthDate(),patientEntityDto.getGender(),
+                patientEntityDto.getAddress(),patientEntityDto.getMedicalRecord()
+        );
+
+        UserEntity userEntity=new UserEntity();
+        userEntity.setClientId(patientEntity.getId());
+        userEntity.setPassword(generateRandomPassword());
+        Faker faker=new Faker();
+        userEntity.setUsername(faker.superhero().prefix()+faker.name().firstName()+faker.address().buildingNumber());
+        userEntity.setRole("PATIENT");
+
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public void addUser2(CaregiverDto caregiverDto) {
+        CaregiverEntity caregiverEntity = caregiverRepository.findByNameAndBirthDateAndGenderAndAddress(
+                caregiverDto.getName(),caregiverDto.getBirthDate(),caregiverDto.getGender(),
+                caregiverDto.getAddress());
+
+        UserEntity userEntity=new UserEntity();
+        userEntity.setClientId(caregiverEntity.getId());
+        userEntity.setPassword(generateRandomPassword());
+        Faker faker=new Faker();
+        userEntity.setUsername(faker.superhero().prefix()+faker.name().firstName()+faker.address().buildingNumber());
+        userEntity.setRole("CAREGIVER");
+
+        userRepository.save(userEntity);
+    }
+
+    public String generateRandomPassword() {
+
+        List<CharacterRule> rules = Arrays.asList(new CharacterRule(EnglishCharacterData.UpperCase, 1),
+                new CharacterRule(EnglishCharacterData.LowerCase, 1), new CharacterRule(EnglishCharacterData.Digit, 1));
+
+        PasswordGenerator generator = new PasswordGenerator();
+        return generator.generatePassword(12, rules);
     }
 
 

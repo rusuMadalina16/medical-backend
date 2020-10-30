@@ -41,7 +41,10 @@ public class PatientServiceImpl implements PatientService{
         }
 
         PatientDtoCare patientDtoCare = patientMapper.toDto2(patient.get());
+        if (patient.get().getDoctorEntity()!=null)
         patientDtoCare.setDoctorId(patient.get().getDoctorEntity().getId());
+
+        if (patient.get().getCaregiverEntity()!=null)
         patientDtoCare.setCaregiverId(patient.get().getCaregiverEntity().getId());
 
         return patientDtoCare;

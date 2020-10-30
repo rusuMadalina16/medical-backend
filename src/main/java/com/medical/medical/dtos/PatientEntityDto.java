@@ -2,7 +2,6 @@ package com.medical.medical.dtos;
 
 import lombok.Data;
 
-
 @Data
 public class PatientEntityDto {
     private Long id;
