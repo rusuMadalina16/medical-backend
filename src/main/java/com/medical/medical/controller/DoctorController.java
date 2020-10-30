@@ -24,6 +24,7 @@ public class DoctorController {
     public ResponseEntity<String> addReceiver(@RequestBody PatientEntityDto patientEntityDto) {
         try {
             doctorService.addPatient(patientEntityDto);
+            doctorService.addUser(patientEntityDto);
             return ResponseEntity.ok().build();
         }
         catch (ServiceException e) {
@@ -115,6 +116,7 @@ public class DoctorController {
     public ResponseEntity<String> addCaregiver(@RequestBody CaregiverDto caregiverDto) {
         try {
             doctorService.addCaregiver(caregiverDto);
+            doctorService.addUser2(caregiverDto);
             return ResponseEntity.ok().build();
         }
         catch (ServiceException e) {
