@@ -53,4 +53,8 @@ public interface DoctorService {
     void addUser(PatientEntityDto patientEntityDto);
 
     void addUser2(CaregiverDto caregiverDto);
+
+    void addDoctor(SignUpDto signUpDto);
+
+    void addUser3(SignUpDto signUpDto);
 }
