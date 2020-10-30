@@ -78,6 +78,9 @@ public class DoctorServiceImpl implements DoctorService{
         if (receiverEntity.isEmpty())
             throw new ServiceException("No patient with that ID exists");
 
+        UserEntity userEntity = userRepository.findByClientId(id);
+        userRepository.deleteById(userEntity.getId());
+
         patientRepository.deleteById(id);
     }
 
@@ -108,6 +111,9 @@ public class DoctorServiceImpl implements DoctorService{
 
         if (caregiverEntity.isEmpty())
             throw new ServiceException("No caregiver with that ID exists");
+
+        UserEntity userEntity = userRepository.findByClientId(id);
+        userRepository.deleteById(userEntity.getId());
 
         caregiverRepository.deleteById(id);
     }
